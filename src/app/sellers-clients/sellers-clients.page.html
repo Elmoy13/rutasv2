@@ -1,0 +1,57 @@
+<ion-header>
+
+</ion-header>
+
+<ion-content>
+  <div class="user-info" *ngIf="seller">
+    <img src="https://images.vexels.com/media/users/3/147101/isolated/preview/b4a49d4b864c74bb73de63f080ad7930-bot-n-de-perfil-de-instagram.png" alt="Foto de perfil" class="logo">
+    <h2>Información del Vendedor</h2>
+    <p>Código del Agente: {{ seller.CodAgen }}</p>
+    <p>Nombre: {{ seller.Nombre }}</p>
+    <p>Email: {{ seller.Email }}</p>
+    <p>Número de Empleado: {{ seller.NoEmpleado }}</p>
+  </div>
+  <br>
+ 
+<br>
+  <ion-list>
+    <ion-item *ngFor="let client of clients" color="light" class="lista-item">
+      <ion-avatar slot="start">
+        <img src="https://images.vexels.com/media/users/3/147101/isolated/preview/b4a49d4b864c74bb73de63f080ad7930-bot-n-de-perfil-de-instagram.png" class="logo-clientes">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{client.RazonSocial}}</h2>
+        <p>Dirección: {{ client.Domicilio }}, {{ client.NoExterior }}</p>
+  <p>Colonia: {{ client.Colonia }}, Población: {{ client.Poblacion }}, Estado: {{ client.Estado }}</p>
+  <p>Teléfono: {{ client.Telefono }}, Código Postal: {{ client.CodPostal }}</p>
+      </ion-label>
+      <ion-button slot="end" fill="clear" (click)="irAMapa(client)">
+        <ion-icon name="arrow-forward"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+  <div class="centrado">
+  <ion-segment [(ngModel)]="selectedDay" style="width: 100%;">
+    <ion-segment-button value="Lunes">Lunes</ion-segment-button>
+    <ion-segment-button value="Martes">Martes</ion-segment-button>
+    <ion-segment-button value="Miercoles">Miércoles</ion-segment-button>
+    <ion-segment-button value="Jueves">Jueves</ion-segment-button>
+    <ion-segment-button value="Viernes">Viernes</ion-segment-button>
+    <ion-segment-button value="Sabado">Sábado</ion-segment-button>
+  </ion-segment>
+  </div>
+  <ion-button (click)="filterClients(selectedDay, 'asignado')">Asignado</ion-button>
+  <ion-button (click)="filterClients(selectedDay, 'visitado')">Visitado</ion-button>
+  <ion-button (click)="filterClients(selectedDay, 'noVisitado')">No Visitado</ion-button>
+  
+  <ion-list *ngIf="filteredClientes.length > 0; else noClients">
+    <ion-item *ngFor="let cliente of filteredClientes">
+      {{ cliente.RazonSocial }}
+    </ion-item>
+  </ion-list>
+  <ng-template #noClients>
+    <p>No hay clientes el {{ selectedDay }} para el estado seleccionado.</p>
+  </ng-template>
+</ion-content>
+
+
