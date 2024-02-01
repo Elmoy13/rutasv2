@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { SellersService } from '../services/sellers.service';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-seller-detail-modal',
@@ -16,14 +17,18 @@ export class SellerDetailModalComponent implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private sellersService: SellersService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private router: Router,
+    private route: ActivatedRoute
+
   ) {}
 
   ngOnInit() {}
 
   closeModal() {
     this.modalController.dismiss();
-    window.location.reload();
+   
+    
   }
 
   selectDay(day: string) {
