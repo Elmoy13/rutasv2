@@ -19,7 +19,7 @@ export class SellersService {
     return this.http.get<any>(`${this.apiUrl}sellers/${codAgen}`);
   }
   createClienteInfo(data: any): Observable<any> {
-    const url = `${this.apiUrl}crear-cliente-info'`;
+    const url = `${this.apiUrl}crear-cliente-info`;
 
     return this.http.post<any>(url, data);
   }
@@ -44,5 +44,10 @@ export class SellersService {
     const url = `${this.apiUrl}clientes/${idCliente}/editar-visitado`;
     const data = {};
     return this.http.put<any>(url, data);
+}
+deleteClientesByRuta(ruta: string): Observable<any> {
+  const url = `${this.apiUrl}delete-cliente-ruta`;
+
+  return this.http.post<any>(url, { Ruta: ruta });
 }
 }

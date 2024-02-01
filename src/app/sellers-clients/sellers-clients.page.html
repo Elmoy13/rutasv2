@@ -1,6 +1,17 @@
-<ion-header>
+<ion-header >
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/sellers"></ion-back-button>
+    </ion-buttons>
 
+    <!-- Agrega el título de la página si es necesario -->
+    <ion-title>Información del Vendedor</ion-title>
+
+    <!-- Agrega el botón de filtro en la esquina derecha -->
+    
+  </ion-toolbar>
 </ion-header>
+
 
 <ion-content>
   <div class="user-info" *ngIf="seller">
@@ -31,18 +42,21 @@
     </ion-item>
   </ion-list>
   <div class="centrado">
-  <ion-segment [(ngModel)]="selectedDay" style="width: 100%;">
-    <ion-segment-button value="Lunes">Lunes</ion-segment-button>
-    <ion-segment-button value="Martes">Martes</ion-segment-button>
-    <ion-segment-button value="Miercoles">Miércoles</ion-segment-button>
-    <ion-segment-button value="Jueves">Jueves</ion-segment-button>
-    <ion-segment-button value="Viernes">Viernes</ion-segment-button>
-    <ion-segment-button value="Sabado">Sábado</ion-segment-button>
-  </ion-segment>
+    <select [(ngModel)]="selectedDay" style="width: 100%;">
+      <option value="Lunes">Lunes</option>
+      <option value="Martes">Martes</option>
+      <option value="Miercoles">Miércoles</option>
+      <option value="Jueves">Jueves</option>
+      <option value="Viernes">Viernes</option>
+      <option value="Sabado">Sábado</option>
+  </select>
   </div>
-  <ion-button (click)="filterClients(selectedDay, 'asignado')">Asignado</ion-button>
-  <ion-button (click)="filterClients(selectedDay, 'visitado')">Visitado</ion-button>
-  <ion-button (click)="filterClients(selectedDay, 'noVisitado')">No Visitado</ion-button>
+  <ion-button (click)="filterClients(selectedDay, 'asignado')" [class]="filterState === 'asignado' ? 'selected-button' : 'unselected-button'">Asignado</ion-button>
+
+  <ion-button (click)="filterClients(selectedDay, 'visitado')" [class]="filterState === 'visitado' ? 'selected-button' : 'unselected-button'">Visitado</ion-button>
+  
+  <ion-button (click)="filterClients(selectedDay, 'noVisitado')" [class]="filterState === 'noVisitado' ? 'selected-button' : 'unselected-button'">No Visitado</ion-button>
+  
   
   <ion-list *ngIf="filteredClientes.length > 0; else noClients">
     <ion-item *ngFor="let cliente of filteredClientes">
@@ -52,6 +66,9 @@
   <ng-template #noClients>
     <p>No hay clientes el {{ selectedDay }} para el estado seleccionado.</p>
   </ng-template>
+
+  <ion-button (click)="onDeleteClientesByRuta()">Eliminar rutas de la semana anterior</ion-button>
+
 </ion-content>
 
 

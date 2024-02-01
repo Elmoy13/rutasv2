@@ -335,6 +335,13 @@ export class MapaPage implements AfterViewInit {
   
     await alert.present();
   }
+  eliminarVenta(index: number) {
+    // Elimina el elemento en la posición 'index' del arreglo de ventas
+    this.ventas.splice(index, 1);
+  
+    // Actualiza el totalPrecioTotal después de eliminar la venta
+    this.actualizarTotalPrecioTotal();
+  }
   
 
  

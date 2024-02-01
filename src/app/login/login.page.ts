@@ -63,9 +63,21 @@ export class LoginPage implements OnInit {
   
         // Verifica el rol y redirige según corresponda
         if (res.role === 'Admin') {
-          this.router.navigate(['/sellers']);
+          this.router.navigate(['/sellers']).then(() => {
+            // Esta función se ejecutará después de la navegación
+            console.log('Navegación completada');
+            
+            // Recargar la página actual (si es necesario)
+            window.location.reload();
+          });
         } else if (res.role === 'Vendedor') {
-          this.router.navigate(['/lista']);
+          this.router.navigate(['/lista']).then(() => {
+            // Esta función se ejecutará después de la navegación
+            console.log('Navegación completada');
+            
+            // Recargar la página actual (si es necesario)
+            window.location.reload();
+          });
         }
   
         this.authService.isLogged = true;

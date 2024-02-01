@@ -57,6 +57,7 @@ product: any;
   }
 
   ionViewDidEnter() {
+    
     this.employee_number = localStorage.getItem('employee_number') || undefined;
     this.obtenerClientes(); // Llamada al servicio de clientes
   
@@ -115,6 +116,36 @@ product: any;
   ngOnInit() {
   
   }
+
+  doRefresh(event: any): void {
+    // Muestra el indicador de carga
+    this.presentLoader2();
+  
+    // Llamada a la función que obtiene los datos actualizados
+    this.obtenerClientes();
+  
+    // Simula un tiempo de espera para la recarga (puedes ajustarlo según tus necesidades)
+    setTimeout(() => {
+      // Cierra el indicador de carga
+      this.dismissLoader2();
+  
+      // Completa la operación de recarga
+      event.target.complete();
+    }, 1000); // 1000 milisegundos (1 segundo) en este ejemplo
+  }
+
+  private async presentLoader2(): Promise<void> {
+    const loading = await this.loadingController.create({
+      message: 'Recargando...', // Puedes personalizar el mensaje de carga
+    });
+    await loading.present();
+  }
+  
+  private async dismissLoader2(): Promise<void> {
+    if (this.loadingController) {
+      await this.loadingController.dismiss();
+    }
+  }
   
   private async presentLoader(): Promise<void> {
     const loading = await this.loadingController.create({
@@ -142,5 +173,14 @@ product: any;
         this.hayClientes = false;
       }
     );
+  }
+  goToLogin() {
+    this.router.navigate(['/login']).then(() => {
+      // Esta función se ejecutará después de la navegación
+      console.log('Navegación completada');
+      
+      // Recargar la página actual (si es necesario)
+      window.location.reload();
+    });
   }
 }

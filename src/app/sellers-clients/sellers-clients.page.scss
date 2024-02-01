@@ -89,3 +89,43 @@ ion-list {
     padding: 20px;
     box-sizing: border-box;
 }
+/* Agrega estilos personalizados al select */
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Cambia el color del borde cuando el select está enfocado */
+select:focus {
+  border-color: #007bff; /* Puedes ajustar el color según tus preferencias */
+  outline: 0;
+}
+
+/* Personaliza el aspecto de las opciones del select */
+select option {
+  background-color: #fff;
+  color: #333;
+}
+
+/* Cambia el color de fondo de las opciones cuando se seleccionan */
+select option:checked {
+  background-color: #52070b;
+  color: #52070b;
+}
+.selected-button {
+  background-color: #52070b; // Color de fondo cuando está seleccionado
+  color: #52070b; // Color del texto cuando está seleccionado
+}
+
+.unselected-button {
+  background-color: #e0141f; // Color de fondo cuando no está seleccionado
+  color: #fff; // Color del texto cuando no está seleccionado
+}
+toolbar-container {
+  background: #ff6d80;
+}

@@ -40,3 +40,16 @@ ion-input {
   border-top: 1px solid #555454; /* Ajusta el color de la línea según tus necesidades */
   margin: 5px 0; /* Ajusta el margen de la línea según tus necesidades */
 }
+
+.tabla-container {
+  margin-top: 10px; /* Ajusta según sea necesario */
+}
+
+.header-row, .venta-row, .total-row {
+  margin-bottom: 5px; /* Ajusta según sea necesario */
+  align-items: center;
+}
+
+.total-row ion-col {
+  font-weight: bold;
+}

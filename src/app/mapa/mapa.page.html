@@ -1,5 +1,16 @@
-<!-- mapa.page.html -->
+<ion-header >
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/lista"></ion-back-button>
+    </ion-buttons>
 
+    <!-- Agrega el título de la página si es necesario -->
+    <ion-title>Información del cliente</ion-title>
+
+    <!-- Agrega el botón de filtro en la esquina derecha -->
+    
+  </ion-toolbar>
+</ion-header>
 <ion-content color="danger">
   <!-- <div class="map-wrapper">
     <div #mapdiv class="map-container">
@@ -7,7 +18,7 @@
     </div>
   </div> -->
   <div class="map-title">
-    <h1>Información del Cliente</h1>
+    
     <hr class="line-divider">
      <h3>Nombre: {{ cliente.RazonSocial }}</h3>
     <h3>Dirección: {{ cliente.Estado }}   {{ cliente.Poblacion }} {{ cliente.Colonia }} <br> {{ cliente.Domicilio }}</h3>
@@ -46,27 +57,29 @@
   <ion-button expand="full" color="danger" (click)="agregarVenta()">Agregar</ion-button>
 
   <div class="tabla-container">
-   
-      <ion-row>
-        <ion-col>ID</ion-col>
-        <ion-col>Kg</ion-col>
-        <ion-col>Precio</ion-col>
-        <ion-col>Precio total</ion-col>
-
-      </ion-row>
-      <ion-row *ngFor="let venta of ventas; let i = index">
-        <ion-col>{{ venta.id }}</ion-col>
-  <ion-col>{{ venta.kg }}</ion-col>
-  <ion-col>{{ venta.precio }}</ion-col>
-  <ion-col>{{ venta.precioTotal }}</ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col></ion-col>
-        <ion-col></ion-col>
-        <ion-col></ion-col>
-        <ion-col>Total: {{ totalPrecioTotal }}</ion-col>
-      </ion-row>
-
+    <ion-row class="header-row">
+      <ion-col>ID</ion-col>
+      <ion-col>Kg</ion-col>
+      <ion-col>Precio</ion-col>
+      <ion-col>Precio total</ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+    
+    <ion-row *ngFor="let venta of ventas; let i = index" class="venta-row">
+      <ion-col>{{ venta.id }}</ion-col>
+      <ion-col>{{ venta.kg }}</ion-col>
+      <ion-col>{{ venta.precio }}</ion-col>
+      <ion-col>{{ venta.precioTotal }}</ion-col>
+      <ion-col>
+        <ion-button (click)="eliminarVenta(i)" color="danger" size="small">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row class="total-row">
+      <ion-col>Total: {{ totalPrecioTotal }}</ion-col>
+    </ion-row>
   </div>
   <ion-button expand="full" (click)="realizarVenta()">Realizar Venta</ion-button>
 </ion-content>

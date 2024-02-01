@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { SellersService } from '../services/sellers.service';
 
 @Component({
@@ -35,7 +35,8 @@ export class SellersPage implements OnInit {
     public formBuilder: FormBuilder,
     private sellersService: SellersService,
     private modalCtrl: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingController: LoadingController 
   ) {
     this.formInit();
     this.userInfo = localStorage.getItem('userData');
@@ -49,7 +50,13 @@ export class SellersPage implements OnInit {
   }
 
   
-  loadSellers() {
+  async loadSellers() {
+    const loading = await this.loadingController.create({
+      message: 'Cargando vendedores...',  // Mensaje que se mostrará en el loader
+    });
+  
+    await loading.present();
+  
     this.sellersService.getAllSellers().subscribe(
       (data) => {
         this.vendedores = data;
@@ -58,9 +65,13 @@ export class SellersPage implements OnInit {
       },
       (error) => {
         console.error('Error al cargar vendedores', error);
+      },
+      () => {
+        loading.dismiss();  // Oculta el loader cuando la operación se completa
       }
     );
   }
+  
   getLocation(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -101,7 +112,13 @@ export class SellersPage implements OnInit {
     this.router.navigate(['/alta-cliente']);
   }
   goToLogin() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+      // Esta función se ejecutará después de la navegación
+      console.log('Navegación completada');
+      
+      // Recargar la página actual (si es necesario)
+      window.location.reload();
+    });
   }
   
   // Aquí puedes agregar las funciones adicionales que necesitas

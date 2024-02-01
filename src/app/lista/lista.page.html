@@ -2,6 +2,11 @@
 </ion-header>
 
 <ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent">
+    </ion-refresher-content>
+  </ion-refresher>
   <div class="user-info">
     <img src="https://images.vexels.com/media/users/3/147101/isolated/preview/b4a49d4b864c74bb73de63f080ad7930-bot-n-de-perfil-de-instagram.png" alt="Foto de perfil" class="logo">
     <h1>Bienvenido {{name2}} </h1>
@@ -36,6 +41,10 @@
     </ion-item>
     </div>
   </ng-template>
+
+  <ion-button expand="block" (click)="goToLogin()">
+    Cerrar sesión
+  </ion-button>
 </ion-content>
 
 
