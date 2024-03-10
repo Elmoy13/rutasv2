@@ -121,7 +121,7 @@ export class SellersClientsPage implements OnInit {
               await this.sellersService.deleteClientesByRuta(this.ruta).toPromise();
               this.dismissLoading(); // Ocultar el loader después de la eliminación
               this.presentAlert('Clientes eliminados exitosamente');
-              window.location.reload();
+              this.router.navigate(['/sellers']);
             } catch (error) {
               this.dismissLoading(); // Ocultar el loader en caso de error
               this.presentAlert('Error al eliminar clientes');

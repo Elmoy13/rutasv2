@@ -14,6 +14,10 @@ export class SellersService {
   getAllSellers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}sellers/all`);
   }
+  registrarVisita(data: any): Observable<any> {
+    const url = `${this.apiUrl}registrar-visita`;
+    return this.http.post<any>(url, data);
+  }
 
   getClientsBySeller(codAgen: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}sellers/${codAgen}`);

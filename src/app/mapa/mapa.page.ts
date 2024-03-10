@@ -203,6 +203,7 @@ export class MapaPage implements AfterViewInit {
         {
           text: 'Aceptar',
           handler: (data) => {
+            this.registrarVisita();
             // Enviar la razón seleccionada al servidor
             this.enviarRazonNoEntrega(data);
           },
@@ -229,6 +230,27 @@ export class MapaPage implements AfterViewInit {
       this.mostrarAlerta('Error', 'Hubo un problema al enviar la razón de no entrega.');
     }
   }
+
+  registrarVisita() {
+    const fechaActual = new Date(); // Obtener la fecha y hora actual
+    const data = {
+      fecha: fechaActual.toISOString(), // Convertir la fecha a formato ISO
+      empleado: this.empleado, // Asegúrate de tener this.empleado definido en tu componente
+      cliente: this.CodCliente, // Asegúrate de tener this.CodCliente definido en tu componente
+      noVenta: null // Debes pasar null como noVenta
+    };
+
+    this.sellersService.registrarVisita(data).subscribe(
+      response => {
+        console.log('Registro de visita exitoso', response);
+        // Puedes manejar la respuesta como desees
+      },
+      error => {
+        console.error('Error al registrar visita', error);
+        // Puedes manejar el error como desees
+      }
+    );
+  }
   agregarVenta() {
     if (this.scannedData.Descripcion && this.nuevosKilogramos) {
       const productoSeleccionado = this.products.find(
@@ -244,17 +266,10 @@ export class MapaPage implements AfterViewInit {
           precio: productoSeleccionado.Publico,
           precioTotal: precioTotal
         });
-
-        // Restablece el valor del input
         this.scannedData.Descripcion = '';
-
-        // Limpia los kilogramos después de agregar la venta
         this.nuevosKilogramos = 0;
-
-        // Actualiza el totalPrecioTotal
         this.actualizarTotalPrecioTotal();
       } else {
-        // Muestra una alerta en lugar de imprimir en la consola
         this.mostrarAlerta('Producto no encontrado', 'Por favor, selecciona un producto válido.');
       }
     } else {
@@ -262,60 +277,58 @@ export class MapaPage implements AfterViewInit {
       this.mostrarAlerta('Error', 'Por favor, selecciona un producto y proporciona la cantidad de kilogramos.');
     }
   }
-  realizarVenta() {
+  async realizarVenta() {
     if (this.ventas.length > 0) {
-      // Incrementa el contador de pedido para el siguiente pedido
-      
-  
-      // Crea el objeto de datos para la solicitud
+      const loader = await this.presentLoader2();
       const data = {
         Fecha: new Date().toISOString(),
         CodCte: this.CodCliente,
-        CodAgen: this.empleado, // Ajusta según tus necesidades
+        CodAgen: this.empleado,
         TotalPzs: this.getTotalKilos(),
         Importe: this.totalPrecioTotal,
-        FechaEntrega: new Date().toISOString(),
         Referencia: 'Referencia', // Ajusta según tus necesidades
-        ParaCliente: true, // Ajusta según tus necesidades
+        ParaCliente: true,
         productos: this.ventas.map((venta, index) => ({
-          NoRenglon: index + 1, // +1 porque los índices comienzan desde 0
+          NoRenglon: index + 1,
           CodProd: venta.id,
           Piezas: venta.kg,
+          Kgs: venta.kg,
+          PrecioUnit: venta.precio,
+     
         })),
+        
       };
+  
       console.log('Datos a enviar en el POST:', data);
-      // Realiza la solicitud HTTP al servicio Laravel usando ProductService
+  
       this.sellersService.createVentaCompleta(data).subscribe(
         (response) => {
-          // Muestra una alerta con la respuesta del servidor
+          loader.dismiss(); 
           this.mostrarAlerta('Éxito', response.messages);
-  
-          // Reinicia el arreglo de ventas y actualiza el totalPrecioTotal
           this.ventas = [];
           this.actualizarTotalPrecioTotal();
+  
           this.sellersService.editarVisitado(this.idCliente).subscribe(
             (editResponse) => {
-              // Maneja la respuesta de editarVisitado si es necesario
               console.log('Edición de visitado exitosa:', editResponse);
             },
             (editError) => {
-              // Maneja los errores de editarVisitado si es necesario
               console.error('Error al editar visitado:', editError);
             }
           );
-          // Puedes redirigir a otra página o realizar otras acciones según tus necesidades
+  
           this.router.navigate(['/lista']);
         },
         (error) => {
-          // Muestra una alerta en caso de error
           this.mostrarAlerta('Error', 'Hubo un problema al realizar la venta.');
         }
       );
     } else {
-      // Muestra una alerta si no hay ventas para realizar
       this.mostrarAlerta('Error', 'No hay ventas para realizar.');
     }
   }
+  
+  
   private getTotalKilos(): number {
     // Calcula el total de kilogramos sumando todas las ventas
     return this.ventas.reduce((total, venta) => total + venta.kg, 0);
@@ -324,6 +337,13 @@ export class MapaPage implements AfterViewInit {
   private actualizarTotalPrecioTotal() {
     // Calcula el total sumando todos los precioTotal de las ventas
     this.totalPrecioTotal = this.ventas.reduce((total, venta) => total + venta.precioTotal, 0);
+  }
+  private async presentLoader2(): Promise<HTMLIonLoadingElement> {
+    const loading = await this.loadingController.create({
+      message: 'Realizando venta...', // Mensaje que se mostrará en el loader
+    });
+    await loading.present();
+    return loading;
   }
   
   async mostrarAlerta(titulo: string, mensaje: string) {

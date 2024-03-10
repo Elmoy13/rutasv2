@@ -12,9 +12,9 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   getAllProducts(): Observable<any> {
-    return this.http.get(this.URI + 'productos/all');
+    return this.http.get(this.URI + 'productos/all/matriz');
   }
   getProductByCode(code: string): Observable<any> {
-    return this.http.get(this.URI + 'productos/' + code);
+    return this.http.get(this.URI + 'productos/matriz/' + code);
   }
 }
